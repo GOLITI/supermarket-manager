@@ -20,12 +20,12 @@ public class PointageController {
 
     @PostMapping("/entree")
     public ResponseEntity<PointageDTO> enregistrerEntree(@RequestParam Long employeId) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(pointageService.enregistrerEntree(employeId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pointageService.pointer(employeId));
     }
 
     @PostMapping("/sortie")
     public ResponseEntity<PointageDTO> enregistrerSortie(@RequestParam Long employeId) {
-        return ResponseEntity.ok(pointageService.enregistrerSortie(employeId));
+        return ResponseEntity.ok(pointageService.pointer(employeId));
     }
 
     @GetMapping("/employe/{employeId}")
@@ -33,12 +33,13 @@ public class PointageController {
             @PathVariable Long employeId,
             @RequestParam LocalDate dateDebut,
             @RequestParam LocalDate dateFin) {
-        return ResponseEntity.ok(pointageService.getPointagesByEmploye(employeId, dateDebut, dateFin));
+        return ResponseEntity.ok(pointageService.obtenirPointagesParPeriode(employeId, dateDebut, dateFin));
     }
 
     @GetMapping("/date/{date}")
-    public ResponseEntity<List<PointageDTO>> getPointagesByDate(@PathVariable LocalDate date) {
-        return ResponseEntity.ok(pointageService.getPointagesByDate(date));
+    public ResponseEntity<List<PointageDTO>> getPointagesByDate(
+            @PathVariable LocalDate date,
+            @RequestParam Long employeId) {
+        return ResponseEntity.ok(pointageService.obtenirPointagesEmployeParDate(employeId, date));
     }
 }
-

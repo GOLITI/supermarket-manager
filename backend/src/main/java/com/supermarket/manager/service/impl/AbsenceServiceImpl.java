@@ -5,7 +5,7 @@ import com.supermarket.manager.exception.ResourceNotFoundException;
 import com.supermarket.manager.model.dto.AbsenceDTO;
 import com.supermarket.manager.model.rh.Absence;
 import com.supermarket.manager.model.rh.Employe;
-import com.supermarket.manager.model.rh.StatutAbsence;
+import com.supermarket.manager.model.rh.StatutDemande;
 import com.supermarket.manager.repository.AbsenceRepository;
 import com.supermarket.manager.repository.EmployeRepository;
 import com.supermarket.manager.service.AbsenceService;
@@ -29,21 +29,20 @@ public class AbsenceServiceImpl implements AbsenceService {
     private final EmployeRepository employeRepository;
 
     @Override
-    public AbsenceDTO demanderAbsence(AbsenceDTO absenceDTO) {
-        log.info("Nouvelle demande d'absence pour l'employé ID: {}", absenceDTO.getEmployeId());
+    public AbsenceDTO creerDemandeAbsence(com.supermarket.manager.model.dto.DemandeAbsenceRequest request) {
+        log.info("Nouvelle demande d'absence pour l'employé ID: {}", request.getEmployeId());
 
-        Employe employe = employeRepository.findById(absenceDTO.getEmployeId())
-                .orElseThrow(() -> new ResourceNotFoundException("Employé non trouvé avec l'ID: " + absenceDTO.getEmployeId()));
+        Employe employe = employeRepository.findById(request.getEmployeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Employé non trouvé avec l'ID: " + request.getEmployeId()));
 
         // Validation des dates
-        if (absenceDTO.getDateFin().isBefore(absenceDTO.getDateDebut())) {
+        if (request.getDateFin().isBefore(request.getDateDebut())) {
             throw new BusinessException("La date de fin doit être après la date de début");
         }
 
         // Vérification des chevauchements
         List<Absence> absencesExistantes = absenceRepository
-                .findByEmployeAndDateDebutLessThanEqualAndDateFinGreaterThanEqual(
-                        employe, absenceDTO.getDateFin(), absenceDTO.getDateDebut());
+                .findByEmployeAndPeriodeOverlap(employe, request.getDateDebut(), request.getDateFin());
 
         if (!absencesExistantes.isEmpty()) {
             throw new BusinessException("Il existe déjà une absence pour cette période");
@@ -51,11 +50,11 @@ public class AbsenceServiceImpl implements AbsenceService {
 
         Absence absence = new Absence();
         absence.setEmploye(employe);
-        absence.setType(absenceDTO.getType());
-        absence.setDateDebut(absenceDTO.getDateDebut());
-        absence.setDateFin(absenceDTO.getDateFin());
-        absence.setMotif(absenceDTO.getMotif());
-        absence.setStatut(StatutAbsence.EN_ATTENTE);
+        absence.setType(request.getType());
+        absence.setDateDebut(request.getDateDebut());
+        absence.setDateFin(request.getDateFin());
+        absence.setMotif(request.getMotif());
+        absence.setStatut(StatutDemande.EN_ATTENTE);
 
         absence = absenceRepository.save(absence);
         log.info("Demande d'absence créée avec succès: ID {}", absence.getId());
@@ -64,34 +63,43 @@ public class AbsenceServiceImpl implements AbsenceService {
     }
 
     @Override
-    public AbsenceDTO approuverAbsence(Long id) {
-        log.info("Approbation de l'absence ID: {}", id);
-
+    public AbsenceDTO obtenirAbsence(Long id) {
+        log.info("Récupération de l'absence ID: {}", id);
         Absence absence = absenceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Absence non trouvée avec l'ID: " + id));
+        return convertirEnDTO(absence);
+    }
 
-        if (absence.getStatut() != StatutAbsence.EN_ATTENTE) {
-            throw new BusinessException("Seules les absences en attente peuvent être approuvées");
+    @Override
+    public AbsenceDTO validerAbsence(Long absenceId, com.supermarket.manager.model.dto.ValidationAbsenceRequest request) {
+        log.info("Validation de l'absence ID: {}", absenceId);
+
+        Absence absence = absenceRepository.findById(absenceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Absence non trouvée avec l'ID: " + absenceId));
+
+        if (absence.getStatut() != StatutDemande.EN_ATTENTE) {
+            throw new BusinessException("Seules les absences en attente peuvent être validées");
         }
 
-        absence.setStatut(StatutAbsence.APPROUVEE);
+        absence.setStatut(request.getApprouvee() ? StatutDemande.APPROUVEE : StatutDemande.REFUSEE);
+        absence.setCommentaireValidation(request.getCommentaire());
         absence = absenceRepository.save(absence);
 
         return convertirEnDTO(absence);
     }
 
     @Override
-    public AbsenceDTO rejeterAbsence(Long id) {
-        log.info("Rejet de l'absence ID: {}", id);
+    public AbsenceDTO annulerAbsence(Long absenceId) {
+        log.info("Annulation de l'absence ID: {}", absenceId);
 
-        Absence absence = absenceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Absence non trouvée avec l'ID: " + id));
+        Absence absence = absenceRepository.findById(absenceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Absence non trouvée avec l'ID: " + absenceId));
 
-        if (absence.getStatut() != StatutAbsence.EN_ATTENTE) {
-            throw new BusinessException("Seules les absences en attente peuvent être rejetées");
+        if (absence.getStatut() == StatutDemande.APPROUVEE) {
+            throw new BusinessException("Impossible d'annuler une absence déjà approuvée");
         }
 
-        absence.setStatut(StatutAbsence.REJETEE);
+        absence.setStatut(StatutDemande.ANNULEE);
         absence = absenceRepository.save(absence);
 
         return convertirEnDTO(absence);
@@ -99,20 +107,20 @@ public class AbsenceServiceImpl implements AbsenceService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AbsenceDTO> getAbsencesByEmploye(Long employeId) {
+    public List<AbsenceDTO> obtenirAbsencesEmploye(Long employeId) {
         Employe employe = employeRepository.findById(employeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employé non trouvé avec l'ID: " + employeId));
 
-        return absenceRepository.findByEmployeOrderByDateDebutDesc(employe).stream()
+        return absenceRepository.findByEmploye(employe).stream()
                 .map(this::convertirEnDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<AbsenceDTO> getAbsencesByPeriode(LocalDate dateDebut, LocalDate dateFin) {
+    public List<AbsenceDTO> obtenirAbsencesParPeriode(LocalDate dateDebut, LocalDate dateFin) {
         return absenceRepository
-                .findByDateDebutBetweenOrDateFinBetween(dateDebut, dateFin, dateDebut, dateFin)
+                .findByPeriode(dateDebut, dateFin)
                 .stream()
                 .map(this::convertirEnDTO)
                 .collect(Collectors.toList());
@@ -120,8 +128,22 @@ public class AbsenceServiceImpl implements AbsenceService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AbsenceDTO> getAbsencesEnAttente() {
-        return absenceRepository.findByStatut(StatutAbsence.EN_ATTENTE).stream()
+    public List<AbsenceDTO> obtenirAbsencesEnAttente() {
+        return absenceRepository.findByStatut(StatutDemande.EN_ATTENTE).stream()
+                .map(this::convertirEnDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AbsenceDTO> obtenirAbsencesEnCoursEmploye(Long employeId) {
+        Employe employe = employeRepository.findById(employeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employé non trouvé avec l'ID: " + employeId));
+
+        LocalDate now = LocalDate.now();
+        return absenceRepository.findByEmploye(employe).stream()
+                .filter(absence -> absence.getStatut() == StatutDemande.APPROUVEE)
+                .filter(absence -> !absence.getDateFin().isBefore(now))
                 .map(this::convertirEnDTO)
                 .collect(Collectors.toList());
     }
@@ -136,10 +158,9 @@ public class AbsenceServiceImpl implements AbsenceService {
                 .type(absence.getType())
                 .dateDebut(absence.getDateDebut())
                 .dateFin(absence.getDateFin())
-                .nombreJours((int) nombreJours)
+                .nombreJours(nombreJours)
                 .motif(absence.getMotif())
                 .statut(absence.getStatut())
                 .build();
     }
 }
-

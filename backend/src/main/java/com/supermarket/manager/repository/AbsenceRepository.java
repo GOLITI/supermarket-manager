@@ -33,9 +33,17 @@ public interface AbsenceRepository extends JpaRepository<Absence, Long> {
                                           @Param("debut") LocalDate debut, 
                                           @Param("fin") LocalDate fin);
     
+    @Query("SELECT a FROM Absence a WHERE a.employe = :employe " +
+           "AND ((a.dateDebut BETWEEN :debut AND :fin) OR (a.dateFin BETWEEN :debut AND :fin) " +
+           "OR (a.dateDebut <= :debut AND a.dateFin >= :fin))")
+    List<Absence> findByEmployeAndPeriodeOverlap(@Param("employe") com.supermarket.manager.model.rh.Employe employe,
+                                                   @Param("debut") LocalDate debut,
+                                                   @Param("fin") LocalDate fin);
+
+    List<Absence> findByEmploye(com.supermarket.manager.model.rh.Employe employe);
+
     long countByEmployeIdAndType(Long employeId, TypeAbsence type);
     
     @Query("SELECT COUNT(a) FROM Absence a WHERE a.statut = :statut")
     long countByStatut(@Param("statut") StatutDemande statut);
 }
-

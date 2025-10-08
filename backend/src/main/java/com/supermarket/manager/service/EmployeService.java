@@ -27,5 +27,11 @@ public interface EmployeService {
     EmployeDTO changerStatut(Long id, StatutEmploye statut);
 
     void supprimerEmploye(Long id);
-}
 
+    // Méthodes pour compatibilité avec le contrôleur
+    List<EmployeDTO> getAllEmployes();
+    EmployeDTO getEmployeById(Long id);
+    EmployeDTO createEmploye(EmployeDTO employeDTO);
+    EmployeDTO updateEmploye(Long id, EmployeDTO employeDTO);
+    void deleteEmploye(Long id);
+}

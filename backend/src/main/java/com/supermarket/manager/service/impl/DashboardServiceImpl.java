@@ -244,7 +244,8 @@ public class DashboardServiceImpl implements DashboardService {
         }
 
         int clientsTotal = stats.stream().mapToInt(StatistiqueFrequentation::getNombreClients).sum();
-        int clientsMoyenParJour = clientsTotal / (int) java.time.temporal.ChronoUnit.DAYS.between(debut, fin.plusDays(1));
+        long jours = java.time.temporal.ChronoUnit.DAYS.between(debut, fin.plusDays(1));
+        int clientsMoyenParJour = jours > 0 ? (int) (clientsTotal / jours) : 0;
 
         Map<String, Integer> clientsParJour = stats.stream()
                 .collect(Collectors.groupingBy(
@@ -257,7 +258,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .map(Map.Entry::getKey)
                 .orElse("Inconnu");
 
-        int heurePointeMoyenne = stats.stream()
+        int heurePointeMoyenne = (int) stats.stream()
                 .filter(StatistiqueFrequentation::getEstHeurePointe)
                 .mapToInt(s -> s.getHeureDebut().getHour())
                 .average()
@@ -267,7 +268,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .clientsTotal(clientsTotal)
                 .clientsMoyenParJour(clientsMoyenParJour)
                 .jourPlusFrequente(jourPlusFrequente)
-                .heurePointeMoyenne((int) heurePointeMoyenne)
+                .heurePointeMoyenne(heurePointeMoyenne)
                 .build();
     }
 
@@ -380,9 +381,8 @@ public class DashboardServiceImpl implements DashboardService {
                 .map(stock -> StockAlertDTO.builder()
                         .produitId(stock.getProduit().getId())
                         .nomProduit(stock.getProduit().getNom())
-                        .quantiteActuelle(stock.getQuantiteActuelle())
-                        .seuilAlerte(stock.getSeuilAlerte())
-                        .niveau("CRITIQUE")
+                        .quantiteActuelle(stock.getQuantite())
+                        .seuilReapprovisionnement(stock.getSeuilReapprovisionnement())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -396,4 +396,3 @@ public class DashboardServiceImpl implements DashboardService {
         return (nombreClients * 100.0) / max;
     }
 }
-

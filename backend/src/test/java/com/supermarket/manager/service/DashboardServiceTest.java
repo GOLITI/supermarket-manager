@@ -3,7 +3,6 @@ package com.supermarket.manager.service;
 import com.supermarket.manager.model.dto.*;
 import com.supermarket.manager.model.produit.Categorie;
 import com.supermarket.manager.model.produit.Produit;
-import com.supermarket.manager.model.produit.TypeProduit;
 import com.supermarket.manager.model.reporting.StatistiqueFrequentation;
 import com.supermarket.manager.model.reporting.VenteProduit;
 import com.supermarket.manager.repository.StatistiqueFrequentationRepository;
@@ -59,14 +58,12 @@ class DashboardServiceTest {
         produitGlace.setId(1L);
         produitGlace.setNom("Glace vanille");
         produitGlace.setCategorie(categorieSurgelés);
-        produitGlace.setTypeProduit(TypeProduit.SURGELE);
         produitGlace.setPrixVente(BigDecimal.valueOf(2500));
         
         produitEau = new Produit();
         produitEau.setId(2L);
         produitEau.setNom("Eau minérale");
         produitEau.setCategorie(categorieSurgelés);
-        produitEau.setTypeProduit(TypeProduit.ALIMENTAIRE_SEC);
         produitEau.setPrixVente(BigDecimal.valueOf(500));
         
         ventesTest = new ArrayList<>();
@@ -189,9 +186,12 @@ class DashboardServiceTest {
                 2L
         };
         
+        List<Object[]> statistiques = new ArrayList<>();
+        statistiques.add(categorieStat);
+
         when(venteProduitRepository.findStatistiquesByCategorie(any(), any()))
-                .thenReturn(Arrays.asList(categorieStat));
-        
+                .thenReturn(statistiques);
+
         List<MargeBeneficiaireDTO> marges = dashboardService.getMargesParCategorie(debut, fin);
         
         assertNotNull(marges);
@@ -256,4 +256,3 @@ class DashboardServiceTest {
         assertEquals("Aucune donnée", frequentation.getJourPlusFrequente());
     }
 }
-

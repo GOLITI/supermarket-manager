@@ -154,6 +154,31 @@ public class EmployeServiceImpl implements EmployeService {
         log.info("Employé supprimé avec succès");
     }
     
+    @Override
+    public List<EmployeDTO> getAllEmployes() {
+        return obtenirTousLesEmployes();
+    }
+
+    @Override
+    public EmployeDTO getEmployeById(Long id) {
+        return obtenirEmploye(id);
+    }
+
+    @Override
+    public EmployeDTO createEmploye(EmployeDTO employeDTO) {
+        return creerEmploye(employeDTO);
+    }
+
+    @Override
+    public EmployeDTO updateEmploye(Long id, EmployeDTO employeDTO) {
+        return modifierEmploye(id, employeDTO);
+    }
+
+    @Override
+    public void deleteEmploye(Long id) {
+        supprimerEmploye(id);
+    }
+
     // Méthodes de mapping
     private EmployeDTO mapToDTO(Employe employe) {
         return EmployeDTO.builder()
@@ -194,4 +219,3 @@ public class EmployeServiceImpl implements EmployeService {
             .build();
     }
 }
-

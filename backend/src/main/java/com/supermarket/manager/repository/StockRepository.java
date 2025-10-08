@@ -20,11 +20,15 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     List<Stock> findByEntrepotId(Long entrepotId);
 
     // Stocks en alerte (quantité <= seuil)
-    @Query("SELECT s FROM Stock s WHERE s.quantite <= s.seuilReapprovisionnement")
+    @Query("SELECT s FROM Stock s WHERE s.quantiteActuelle <= s.seuilAlerte")
+    List<Stock> findStocksEnDessousDuSeuil();
+
+    // Stocks en alerte (méthode alternative)
+    @Query("SELECT s FROM Stock s WHERE s.quantiteActuelle <= s.seuilAlerte")
     List<Stock> findStocksEnAlerte();
 
-    // Stocks par entrepôt en alerte
-    @Query("SELECT s FROM Stock s WHERE s.entrepot.id = :entrepotId AND s.quantite <= s.seuilReapprovisionnement")
+    // Stocks en alerte par entrepôt
+    @Query("SELECT s FROM Stock s WHERE s.quantiteActuelle <= s.seuilAlerte AND s.entrepot.id = :entrepotId")
     List<Stock> findStocksEnAlerteByEntrepot(@Param("entrepotId") Long entrepotId);
 
     // Stocks proches de la péremption
@@ -35,4 +39,3 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     @Query("SELECT COALESCE(SUM(s.quantite), 0) FROM Stock s WHERE s.produit.id = :produitId")
     Integer getTotalStockProduit(@Param("produitId") Long produitId);
 }
-
