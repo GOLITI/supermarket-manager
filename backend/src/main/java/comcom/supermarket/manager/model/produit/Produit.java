@@ -73,5 +73,13 @@ public class Produit {
     protected void onUpdate() {
         dateModification = LocalDateTime.now();
     }
-}
 
+    // Méthodes alias pour compatibilité
+    public BigDecimal getPrix() {
+        return prixVente;
+    }
+
+    public String getCodeBarre() {
+        return codeBarres;
+    }
+}

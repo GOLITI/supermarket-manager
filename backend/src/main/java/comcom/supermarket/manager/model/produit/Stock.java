@@ -79,6 +79,10 @@ public class Stock {
         verifierAlerte();
     }
 
+    public void augmenterQuantite(Integer quantiteAjoutee) {
+        ajouterQuantite(quantiteAjoutee);
+    }
+
     public void retirerQuantite(Integer quantiteRetiree) {
         if (this.quantite >= quantiteRetiree) {
             this.quantite -= quantiteRetiree;
@@ -88,5 +92,8 @@ public class Stock {
             throw new IllegalArgumentException("Stock insuffisant");
         }
     }
-}
 
+    public void diminuerQuantite(Integer quantiteRetiree) {
+        retirerQuantite(quantiteRetiree);
+    }
+}

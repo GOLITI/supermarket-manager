@@ -77,7 +77,7 @@ public class Commande {
 
     public void calculerMontantTotal() {
         this.montantTotal = lignes.stream()
-            .map(ligne -> ligne.getPrixUnitaire().multiply(BigDecimal.valueOf(ligne.getQuantite())))
+            .map(LigneCommande::getMontantLigne)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -93,4 +93,3 @@ public class Commande {
         calculerMontantTotal();
     }
 }
-

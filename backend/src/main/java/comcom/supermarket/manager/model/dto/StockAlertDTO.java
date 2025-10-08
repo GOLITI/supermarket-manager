@@ -24,7 +24,6 @@ public class StockAlertDTO {
     private Long fournisseurId;
     private String nomFournisseur;
     private Integer delaiLivraisonJours;
-    private String niveauAlerte; // CRITIQUE, MOYEN, BAS
 
     public String getNiveauAlerte() {
         if (quantiteActuelle == 0) {
@@ -37,4 +36,3 @@ public class StockAlertDTO {
         return "BAS";
     }
 }
-
