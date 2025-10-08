@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -81,11 +82,15 @@ public class StockAlertScheduler {
                 log.warn("⚠️ {} produit(s) proche(s) de la péremption (30 jours)",
                     stocksProchesPeremption.size());
 
-                stocksProchesPeremption.forEach(stock ->
-                    log.warn("PÉREMPTION PROCHE: {} - Date de péremption: {}",
-                        stock.getProduit().getNom(),
-                        stock.getDatePeremption()
-                    ));
+                stocksProchesPeremption.forEach(stock -> {
+                    LocalDate datePeremption = stock.getDatePeremption();
+                    if (datePeremption != null) {
+                        log.warn("PÉREMPTION PROCHE: {} - Date de péremption: {}",
+                            stock.getProduit().getNom(),
+                            datePeremption
+                        );
+                    }
+                });
 
                 // TODO: Envoyer des notifications
                 // TODO: Suggérer des promotions pour écouler les stocks
@@ -101,4 +106,3 @@ public class StockAlertScheduler {
         log.info("Fin de la vérification des péremptions");
     }
 }
-
