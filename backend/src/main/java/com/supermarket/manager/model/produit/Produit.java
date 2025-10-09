@@ -51,6 +51,13 @@ public class Produit {
     @Column(nullable = false)
     private Boolean actif = true;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_marque", length = 50)
+    private TypeMarque typeMarque;
+
+    @Column(name = "marque", length = 100)
+    private String marque;
+
     @Column(name = "date_peremption_requis")
     private Boolean datePeremptionRequis = false;
 

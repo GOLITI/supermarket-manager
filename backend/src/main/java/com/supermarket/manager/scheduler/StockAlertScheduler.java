@@ -16,6 +16,7 @@ import java.util.List;
 public class StockAlertScheduler {
 
     private final StockService stockService;
+    private final com.supermarket.manager.service.EmailService emailService;
 
     /**
      * Vérifie les stocks en alerte toutes les heures
@@ -26,35 +27,21 @@ public class StockAlertScheduler {
         log.info("Début de la vérification des alertes de stock");
 
         try {
-            List<StockAlertDTO> alertes = stockService.getStocksEnAlerte();
+            List<com.supermarket.manager.model.produit.Stock> alertes = stockService.getStocksEnAlerte()
+                .stream()
+                .map(dto -> stockService.getStockById(dto.getStockId()))
+                .toList();
 
             if (!alertes.isEmpty()) {
                 log.warn("⚠️ {} produit(s) en alerte de stock détecté(s)", alertes.size());
 
-                // Compter les alertes par niveau
-                long alertesCritiques = alertes.stream()
-                    .filter(a -> "CRITIQUE".equals(a.getNiveauAlerte()))
-                    .count();
-
-                long alertesMoyennes = alertes.stream()
-                    .filter(a -> "MOYEN".equals(a.getNiveauAlerte()))
-                    .count();
-
-                log.warn("   - Alertes CRITIQUES: {}", alertesCritiques);
-                log.warn("   - Alertes MOYENNES: {}", alertesMoyennes);
-
-                // Afficher les produits en alerte critique
-                alertes.stream()
-                    .filter(a -> "CRITIQUE".equals(a.getNiveauAlerte()))
-                    .forEach(alerte -> log.error(
-                        "STOCK CRITIQUE: {} - Quantité actuelle: {}, Seuil: {}",
-                        alerte.getNomProduit(),
-                        alerte.getQuantiteActuelle(),
-                        alerte.getSeuilReapprovisionnement()
-                    ));
-
-                // TODO: Envoyer des notifications par email aux responsables
-                // TODO: Générer des rapports automatiques
+                // Envoyer des emails pour chaque alerte critique
+                alertes.forEach(stock -> {
+                    if (stock.getQuantite() <= stock.getSeuilReapprovisionnement() / 2) {
+                        emailService.sendAlertStock(stock);
+                        log.info("Email d'alerte envoyé pour: {}", stock.getProduit().getNom());
+                    }
+                });
 
             } else {
                 log.info("✓ Aucune alerte de stock détectée");
@@ -82,27 +69,20 @@ public class StockAlertScheduler {
                 log.warn("⚠️ {} produit(s) proche(s) de la péremption (30 jours)",
                     stocksProchesPeremption.size());
 
+                // Envoyer des emails d'alerte péremption
                 stocksProchesPeremption.forEach(stock -> {
-                    LocalDate datePeremption = stock.getDatePeremption();
-                    if (datePeremption != null) {
-                        log.warn("PÉREMPTION PROCHE: {} - Date de péremption: {}",
-                            stock.getProduit().getNom(),
-                            datePeremption
-                        );
-                    }
+                    emailService.sendAlertPeremption(stock);
+                    log.info("Email d'alerte péremption envoyé pour: {}", stock.getProduit().getNom());
                 });
-
-                // TODO: Envoyer des notifications
-                // TODO: Suggérer des promotions pour écouler les stocks
 
             } else {
                 log.info("✓ Aucun produit proche de la péremption");
             }
 
         } catch (Exception e) {
-            log.error("Erreur lors de la vérification des péremptions", e);
+            log.error("Erreur lors de la vérification des produits proches de la péremption", e);
         }
 
-        log.info("Fin de la vérification des péremptions");
+        log.info("Fin de la vérification des produits proches de la péremption");
     }
 }

@@ -282,8 +282,8 @@ class StockServiceTest {
 
     @Test
     void testNiveauAlerte_Moyen() {
-        // Given
-        stock.setQuantite(50);
+        // Given - pour avoir MOYEN, il faut quantite > seuil/2 ET quantite <= seuil
+        stock.setQuantite(60); // 60 > 50 (100/2) ET 60 <= 100
         stock.setSeuilReapprovisionnement(100);
         List<Stock> stocks = Arrays.asList(stock);
         when(stockRepository.findStocksEnAlerte()).thenReturn(stocks);
