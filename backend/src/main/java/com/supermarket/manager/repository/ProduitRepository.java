@@ -24,5 +24,18 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
 
     @Query("SELECT p FROM Produit p WHERE LOWER(p.nom) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(p.code) LIKE LOWER(CONCAT('%', :search, '%'))")
     List<Produit> searchProduits(@Param("search") String search);
-}
 
+    // Recherche par type de marque
+    List<Produit> findByTypeMarque(com.supermarket.manager.model.produit.TypeMarque typeMarque);
+
+    // Recherche par marque
+    List<Produit> findByMarqueIgnoreCase(String marque);
+
+    // Produits de marque propre actifs
+    @Query("SELECT p FROM Produit p WHERE p.typeMarque = 'MARQUE_PROPRE' AND p.actif = true")
+    List<Produit> findMarquePropresActifs();
+
+    // Produits grandes marques actifs
+    @Query("SELECT p FROM Produit p WHERE p.typeMarque = 'GRANDE_MARQUE' AND p.actif = true")
+    List<Produit> findGrandesMarquesActifs();
+}

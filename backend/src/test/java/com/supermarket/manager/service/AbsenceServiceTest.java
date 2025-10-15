@@ -90,7 +90,19 @@ class AbsenceServiceTest {
     void creerDemandeAbsence_Success() {
         when(employeRepository.findById(1L)).thenReturn(Optional.of(employe));
         when(absenceRepository.findByEmployeAndPeriode(any(), any(), any())).thenReturn(List.of());
-        when(absenceRepository.save(any(Absence.class))).thenReturn(absence);
+
+        // L'absence retournée doit avoir le bon statut
+        Absence absenceCreated = Absence.builder()
+            .id(1L)
+            .employe(employe)
+            .type(TypeAbsence.CONGE_PAYE)
+            .dateDebut(demandeRequest.getDateDebut())
+            .dateFin(demandeRequest.getDateFin())
+            .motif("Congés annuels")
+            .statut(StatutDemande.EN_ATTENTE)
+            .build();
+
+        when(absenceRepository.save(any(Absence.class))).thenReturn(absenceCreated);
 
         AbsenceDTO result = absenceService.creerDemandeAbsence(demandeRequest);
 
@@ -129,6 +141,9 @@ class AbsenceServiceTest {
     @Test
     @DisplayName("Valider une absence - Approuvée")
     void validerAbsence_Approuvee_Success() {
+        // L'absence doit être en attente au début
+        absence.setStatut(StatutDemande.EN_ATTENTE);
+
         ValidationAbsenceRequest validationRequest = ValidationAbsenceRequest.builder()
             .validateurId(2L)
             .approuvee(true)
@@ -137,12 +152,26 @@ class AbsenceServiceTest {
 
         when(absenceRepository.findById(1L)).thenReturn(Optional.of(absence));
         when(employeRepository.findById(2L)).thenReturn(Optional.of(validateur));
-        when(absenceRepository.save(any(Absence.class))).thenReturn(absence);
+
+        // Après validation, le statut change
+        Absence absenceApprouvee = Absence.builder()
+            .id(1L)
+            .employe(employe)
+            .type(TypeAbsence.CONGE_PAYE)
+            .dateDebut(absence.getDateDebut())
+            .dateFin(absence.getDateFin())
+            .motif("Congés annuels")
+            .statut(StatutDemande.APPROUVEE)
+            .validateur(validateur)
+            .commentaireValidation("Approuvé")
+            .build();
+
+        when(absenceRepository.save(any(Absence.class))).thenReturn(absenceApprouvee);
 
         AbsenceDTO result = absenceService.validerAbsence(1L, validationRequest);
 
         assertThat(result).isNotNull();
+        assertThat(result.getStatut()).isEqualTo(StatutDemande.APPROUVEE);
         verify(absenceRepository, times(1)).save(any(Absence.class));
     }
 }
-
