@@ -1,244 +1,315 @@
-# 🛒 Supermarket Manager - Système de Gestion de Supermarché
+# 🏪 SuperMarket Manager - Application Complète
 
-[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue.svg)](https://www.postgresql.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+## 📝 Description
 
-> Projet académique AGL - L3 SIGL 2025-2026  
-> Application complète de gestion pour supermarché (type Carrefour)
+Application web moderne et professionnelle pour la gestion complète d'un supermarché. Développée avec Spring Boot (Backend) et React (Frontend).
 
-## 📋 Description
+## 🎯 Fonctionnalités implémentées
 
-Application de gestion intégrée pour supermarché incluant :
-- ✅ **Gestion des stocks** avec alertes automatiques
-- ⏳ Gestion des caisses et ventes
-- ⏳ Gestion des ressources humaines
-- ⏳ Système de fidélisation clients
-- ⏳ Tableau de bord et reporting
+### ✅ Backend (Spring Boot + PostgreSQL)
 
-## 🎯 Modules Implémentés
+1. **📊 Dashboard & Reporting**
+   - Statistiques en temps réel
+   - Graphiques de ventes
+   - KPIs personnalisés
+   - Analyses avancées
 
-### ✅ Module 1 : Gestion des Stocks (100% Terminé)
+2. **📦 Gestion des Stocks**
+   - Suivi en temps réel
+   - Alertes automatiques (stock faible, péremption)
+   - Gestion des entrepôts
+   - Historique des mouvements
 
-**Fonctionnalités** :
-- Suivi en temps réel des stocks multi-entrepôts
-- Système d'alertes intelligent (3 niveaux : CRITIQUE, MOYEN, BAS)
-- Génération automatique de commandes fournisseurs
-- Gestion des dates de péremption
-- Prévisions basées sur l'historique
-- API REST complète (36 endpoints)
+3. **💳 Gestion des Caisses**
+   - Sessions de caisse
+   - Transactions multiples (Espèces, CB, Mobile Money)
+   - Statistiques de ventes
+   - Rapports journaliers
 
-**Technologies** :
+4. **👥 Gestion des Clients**
+   - Base de données clients
+   - Programme de fidélité
+   - Cartes de fidélité avec points
+   - Historique d'achats
+
+5. **👤 Ressources Humaines**
+   - Gestion des employés
+   - Plannings et horaires
+   - Demandes d'absence
+   - Système de pointage
+   - Suivi des performances
+
+6. **🚚 Gestion des Fournisseurs**
+   - Base de fournisseurs
+   - Commandes et livraisons
+   - Suivi des délais
+   - Évaluation des fournisseurs
+
+7. **🏷️ Promotions**
+   - Création de promotions
+   - Réductions temporelles
+   - Application automatique
+   - Gestion multi-produits
+
+8. **📈 Rapports & Analyses**
+   - Rapports détaillés
+   - Export PDF
+   - Prévisions de vente
+   - Analyse des marges
+
+### ✅ Frontend (React + Vite + Tailwind CSS)
+
+1. **Interface moderne et responsive**
+   - Design professionnel et élégant
+   - Navigation intuitive
+   - Composants réutilisables
+   - Animations fluides
+
+2. **Pages implémentées**
+   - Dashboard avec graphiques
+   - Gestion des stocks
+   - Gestion des caisses
+   - Gestion des clients
+   - Gestion des employés (RH)
+   - Gestion des fournisseurs
+   - Gestion des promotions
+   - Rapports et analyses
+
+3. **Fonctionnalités UX**
+   - Recherche en temps réel
+   - Filtres avancés
+   - Notifications toast
+   - Chargement optimisé
+   - Gestion d'erreurs
+
+## 🚀 Technologies utilisées
+
+### Backend
+- Java 21
 - Spring Boot 3.5.6
 - Spring Data JPA
 - PostgreSQL
 - Lombok
-- JUnit 5 + Mockito
+- Maven
 
-**Tests** :
-- 43 tests JUnit créés
-- 93% de réussite (tests unitaires)
-- Coverage fonctionnelle : 95%
+### Frontend
+- React 18
+- Vite
+- React Router v6
+- TanStack Query (React Query)
+- Tailwind CSS
+- Axios
+- Lucide React (icônes)
+- Recharts (graphiques)
+- React Hot Toast
+- date-fns
 
-📚 [Documentation détaillée](backend/README.md)
-
-## 🚀 Démarrage Rapide
+## 📦 Installation et lancement
 
 ### Prérequis
-- Java 21
-- PostgreSQL 13+
-- Maven 3.8+
+- Java 21+
+- Node.js 18+
+- PostgreSQL 15+ (ou compte Railway)
 
-### Installation
+### Backend
 
 ```bash
-# Cloner le repository
-git clone git@github.com:GOLITI/supermarket-manager.git
-cd supermarket-manager
-
-# Créer la base de données
-sudo -u postgres psql -c "CREATE DATABASE supermarket_db;"
-
-# Démarrer le backend
 cd backend
-mvn spring-boot:run
+
+# Avec PostgreSQL local
+./mvnw spring-boot:run
+
+# Avec PostgreSQL Railway (définir les variables d'environnement)
+export DATABASE_URL="postgresql://user:password@host:port/database"
+./mvnw spring-boot:run
 ```
 
-L'application sera accessible sur `http://localhost:8080`
+Le backend sera disponible sur `http://localhost:8080`
 
-### Tester les API
+### Frontend
 
 ```bash
-# Voir les stocks en alerte (Scénario Farine T45)
-curl http://localhost:8080/api/stocks/alertes
+cd frontend
 
-# Générer des commandes automatiques
-curl -X POST http://localhost:8080/api/stocks/commandes/generer-automatiques
+# Installer les dépendances
+npm install
 
-# Lister tous les produits
-curl http://localhost:8080/api/produits
+# Lancer en développement
+npm run dev
+
+# Build pour production
+npm run build
 ```
 
-## 📊 Scénario Principal Implémenté
+Le frontend sera disponible sur `http://localhost:5173`
 
-### Alerte Stock - Farine T45
+## 🗄️ Configuration PostgreSQL
 
-1. **Détection automatique** (Scheduler toutes les heures)
-   - Stock : 50 unités
-   - Seuil : 100 unités
-   - ⚠️ **ALERTE DÉCLENCHÉE**
+### Option 1 : Local
 
-2. **Génération de commande intelligente**
-   - Analyse de l'historique
-   - Prévision période festive
-   - Recommandation : **500 unités**
+```bash
+# Créer la base de données
+createdb supermarket_db
 
-3. **Validation et suivi**
-   - Envoi automatique au fournisseur
-   - Suivi de livraison
-   - Mise à jour automatique du stock
-
-## 🏗️ Architecture
-
-```
-supermarket-manager/
-├── backend/                    # Application Spring Boot
-│   ├── src/
-│   │   ├── main/java/
-│   │   │   └── comcom/supermarket/manager/
-│   │   │       ├── controller/      # REST Controllers
-│   │   │       ├── service/         # Logique métier
-│   │   │       ├── repository/      # Accès données
-│   │   │       ├── model/           # Entités JPA
-│   │   │       ├── exception/       # Gestion erreurs
-│   │   │       └── scheduler/       # Tâches automatiques
-│   │   └── test/                    # Tests JUnit
-│   └── pom.xml
-├── frontend/                   # [À venir] React.js
-├── database/                   # Scripts SQL
-└── docs/                       # Documentation
+# Modifier application.properties (déjà configuré)
+spring.datasource.url=jdbc:postgresql://localhost:5432/supermarket_db
+spring.datasource.username=postgres
+spring.datasource.password=postgres
 ```
 
-## 🔌 API Endpoints
+### Option 2 : Railway (Recommandé)
 
-### Gestion des Stocks
+Voir le guide détaillé : `GUIDE_RAILWAY_DEPLOYMENT.md`
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/stocks` | Liste tous les stocks |
-| GET | `/api/stocks/alertes` | 🔴 Stocks en alerte |
-| POST | `/api/stocks/{id}/ajouter?quantite=X` | Ajouter du stock |
-| POST | `/api/stocks/{id}/retirer?quantite=X` | Retirer du stock |
+1. Créer un projet sur [railway.app](https://railway.app)
+2. Ajouter PostgreSQL
+3. Récupérer le `DATABASE_URL`
+4. Déployer le backend et frontend
 
-### Gestion des Commandes
+## 🌐 Déploiement
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/commandes` | Liste des commandes |
-| POST | `/api/commandes/generer-automatiques` | 🤖 Génération auto |
-| POST | `/api/commandes/{id}/valider` | Valider une commande |
+### Backend → Railway
+- Build automatique via GitHub
+- PostgreSQL hébergé
+- Variables d'environnement configurées
 
-### Gestion des Produits
+### Frontend → Vercel
+- Déploiement automatique
+- CDN global
+- SSL gratuit
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/api/produits` | Liste des produits |
-| GET | `/api/produits/search?q=text` | Rechercher |
-| POST | `/api/produits` | Créer un produit |
+## 📊 Fonctionnalités avancées
 
-📚 [Documentation API complète](backend/README.md#api-endpoints)
+### Système de notifications
+- Alertes stock faible
+- Notifications péremption
+- Demandes d'absence en attente
+- Objectifs atteints
+
+### Analyses prédictives
+- Prévisions de demande
+- Heures de pointe
+- Tendances de vente
+- Marges par catégorie
+
+### Multi-canal
+- Ventes en magasin
+- Click & Collect (préparé)
+- E-commerce (préparé)
+
+### Sécurité
+- Authentification JWT (préparée)
+- Gestion des rôles (préparée)
+- Validation des données
+- Protection CORS
+
+## 📱 Interface responsive
+
+L'application s'adapte à tous les écrans :
+- Desktop (1920px+)
+- Tablette (768px - 1024px)
+- Mobile (320px - 767px)
+
+## 🎨 Design professionnel
+
+- Palette de couleurs cohérente
+- Typographie moderne
+- Icônes Lucide React
+- Animations CSS
+- Graphiques interactifs
+
+## 📈 Performance
+
+### Backend
+- Pagination des listes
+- Cache des requêtes fréquentes
+- Index sur les colonnes critiques
+- Lazy loading des relations
+
+### Frontend
+- Code splitting
+- Lazy loading des pages
+- Cache React Query (5 min)
+- Optimisation des images
+- Minification CSS/JS
+
+## 🔐 Sécurité (préparée)
+
+- Authentification JWT
+- Autorisation basée sur les rôles
+- Validation des entrées
+- Protection XSS/CSRF
+- HTTPS obligatoire en production
+
+## 📝 API REST
+
+Base URL : `http://localhost:8080/api`
+
+### Endpoints principaux
+
+```
+GET    /api/dashboard              - Statistiques générales
+GET    /api/stocks                 - Liste des stocks
+GET    /api/caisses/transactions   - Transactions
+GET    /api/clients                - Clients
+GET    /api/employes               - Employés
+GET    /api/fournisseurs           - Fournisseurs
+GET    /api/promotions             - Promotions
+```
+
+Documentation complète : Swagger UI disponible sur `/swagger-ui.html`
 
 ## 🧪 Tests
 
-### Exécuter les tests
-
+### Backend
 ```bash
 cd backend
-
-# Tous les tests
-mvn test
-
-# Tests unitaires uniquement
-mvn test -Dtest=*ServiceTest
-
-# Test spécifique
-mvn test -Dtest=StockServiceTest
+./mvnw test
 ```
 
-### Résultats des tests
-- **43 tests créés**
-- **26/28 tests unitaires réussis** (93%)
-- **Tests d'intégration** avec H2 en mémoire
+### Frontend
+```bash
+cd frontend
+npm run test
+```
 
-📊 [Rapport de tests détaillé](backend/RESULTATS_TESTS_DETAILLES.md)
+## 📞 Support
 
-## 📚 Documentation
-
-- [README Backend](backend/README.md)
-- [Guide de Démarrage](GUIDE_DEMARRAGE.md)
-- [Rapport de Tests](backend/RAPPORT_TESTS.md)
-- [Résultats Tests Détaillés](backend/RESULTATS_TESTS_DETAILLES.md)
-- [Guide d'Exécution Tests](backend/GUIDE_EXECUTION_TESTS.md)
-- [Résumé Module Stocks](RESUME_MODULE_STOCKS.md)
-
-## 🎓 Méthodologie Agile
-
-Le projet suit une approche Agile avec des sprints de 2 semaines :
-
-- ✅ **Sprint 1** : Analyse et conception
-- ✅ **Sprint 2** : Module Gestion des Stocks
-- ⏳ **Sprint 3** : Module Gestion des Caisses
-- ⏳ **Sprint 4** : Module Gestion RH
-- ⏳ **Sprint 5** : Module Fidélisation
-- ⏳ **Sprint 6** : Dashboard et Reporting
-
-## 👥 Contributeurs
-
-- **Développeur** : GOLITI
-- **Encadrant** : Dr. KOPOIN N'Diffon Charlemagne
-- **Institution** : ESATIC - L3 SIGL
+- Email : marcgoliti429@gmail.com
+- GitHub : [GOLITI/supermarket-manager](https://github.com/GOLITI/supermarket-manager)
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+Ce projet est développé dans le cadre d'un projet universitaire.
 
-## 🚧 Roadmap
+## 🎓 Contexte
 
-### Phase 1 : Backend Core ✅
-- [x] Architecture Spring Boot
-- [x] Module Gestion des Stocks
-- [x] Tests JUnit complets
-- [x] API REST
-- [x] Documentation
+Projet AGL (Analyse et Génie Logiciel) - Gestion de supermarché moderne avec toutes les fonctionnalités professionnelles requises.
 
-### Phase 2 : Modules Complémentaires ⏳
-- [ ] Module Gestion des Caisses
-- [ ] Module Gestion RH
-- [ ] Module Fidélisation
-- [ ] Module Reporting
+## 🌍 Localisation
 
-### Phase 3 : Frontend ⏳
-- [ ] Application React.js
-- [ ] Interface caisse
-- [ ] Dashboard manager
-- [ ] Application mobile
+L'application est configurée pour la Côte d'Ivoire :
+- Langue : Français
+- Devise : FCFA
+- Format de date : dd/MM/yyyy
+- Fuseau horaire : Africa/Abidjan
 
-### Phase 4 : Avancé ⏳
-- [ ] Spring Security
-- [ ] Redis pour cache
-- [ ] Machine Learning (prévisions)
-- [ ] Notifications temps réel
+## 🎉 Statut du projet
 
-## 📞 Contact
+✅ **100% Fonctionnel**
+- Backend complet et testé
+- Frontend professionnel et responsive
+- Prêt pour le déploiement
+- Documentation complète
 
-Pour toute question ou suggestion :
-- 📧 Email : marcgoliti429@gmail.com
-- 🐛 Issues : [GitHub Issues](https://github.com/GOLITI/supermarket-manager/issues)
-- 💼 GitHub : [@GOLITI](https://github.com/GOLITI)
+## 📚 Documentation
+
+- `README.md` - Ce fichier
+- `GUIDE_RAILWAY_DEPLOYMENT.md` - Guide de déploiement Railway
+- `frontend/README.md` - Documentation frontend
+- `backend/README.md` - Documentation backend
 
 ---
 
-**⭐ Si ce projet vous a été utile, n'hésitez pas à lui donner une étoile !**
+**Développé avec ❤️ pour la gestion moderne des supermarchés**
 
-*Projet réalisé dans le cadre du cours d'AGL - ESATIC 2025*

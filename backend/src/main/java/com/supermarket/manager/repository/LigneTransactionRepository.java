@@ -12,7 +12,7 @@ import java.util.List;
 public interface LigneTransactionRepository extends JpaRepository<LigneTransaction, Long> {
     List<LigneTransaction> findByTransactionId(Long transactionId);
 
-    @Query("SELECT lt.produit.id, lt.produit.nom, lt.produit.codeBarre, SUM(lt.quantite), SUM(lt.quantite * lt.prixUnitaire), COUNT(DISTINCT lt.transaction) FROM LigneTransaction lt WHERE lt.transaction.dateHeure >= :debut AND lt.transaction.dateHeure <= :fin AND lt.transaction.statut = 'COMPLETEE' GROUP BY lt.produit.id, lt.produit.nom, lt.produit.codeBarre ORDER BY SUM(lt.quantite) DESC")
+    @Query("SELECT lt.produit.id, lt.produit.nom, lt.produit.code, SUM(lt.quantite), SUM(lt.quantite * lt.prixUnitaire), COUNT(DISTINCT lt.transaction) FROM LigneTransaction lt WHERE lt.transaction.dateHeure >= :debut AND lt.transaction.dateHeure <= :fin AND lt.transaction.statut = 'COMPLETEE' GROUP BY lt.produit.id, lt.produit.nom, lt.produit.code ORDER BY SUM(lt.quantite) DESC")
     List<Object[]> produitsLesPlusVendus(@Param("debut") LocalDateTime debut, @Param("fin") LocalDateTime fin);
 
     @Query("SELECT SUM(lt.quantite) FROM LigneTransaction lt WHERE lt.transaction.dateHeure >= :debut AND lt.transaction.dateHeure <= :fin AND lt.transaction.statut = 'COMPLETEE'")

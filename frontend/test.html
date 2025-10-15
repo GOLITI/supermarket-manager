@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Supermarket Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #0ea5e9; }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee2e2; color: #991b1b; }
+        button {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0284c7; }
+        #result { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🧪 Test Supermarket Manager</h1>
+
+        <h2>État des serveurs :</h2>
+        <div id="frontend-status" class="status">Frontend : ✅ En cours d'exécution</div>
+        <div id="backend-status" class="status">Backend : ⏳ Test en cours...</div>
+
+        <h2>Test de connexion :</h2>
+        <button onclick="testBackend()">Tester le Backend</button>
+        <button onclick="testDashboard()">Tester l'API Dashboard</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Test de connexion au backend
+        async function testBackend() {
+            const resultDiv = document.getElementById('result');
+            const backendStatus = document.getElementById('backend-status');
+            resultDiv.innerHTML = '<p>🔄 Test en cours...</p>';
+
+            try {
+                const response = await fetch('http://localhost:8080/api/dashboard');
+                const data = await response.json();
+
+                backendStatus.className = 'status success';
+                backendStatus.textContent = 'Backend : ✅ Connecté';
+
+                resultDiv.innerHTML = `
+                    <div class="status success">
+                        <h3>✅ Backend opérationnel !</h3>
+                        <p>Statut : ${response.status}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                backendStatus.className = 'status error';
+                backendStatus.textContent = 'Backend : ❌ Erreur de connexion';
+
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        <h3>❌ Erreur de connexion</h3>
+                        <p>${error.message}</p>
+                        <p>Vérifiez que le backend est démarré sur le port 8080</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Test de l'API Dashboard
+        async function testDashboard() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>🔄 Récupération des statistiques...</p>';
+
+            try {
+                const response = await fetch('http://localhost:8080/api/dashboard');
+                const data = await response.json();
+
+                resultDiv.innerHTML = `
+                    <div class="status success">
+                        <h3>📊 Statistiques du Dashboard</h3>
+                        <ul>
+                            <li>Chiffre d'affaires : ${data.chiffreAffaires || 'N/A'} FCFA</li>
+                            <li>Nombre de ventes : ${data.nombreVentes || 0}</li>
+                            <li>Produits en stock : ${data.produitsEnStock || 0}</li>
+                            <li>Alertes de stock : ${data.alertesStock || 0}</li>
+                        </ul>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        <h3>❌ Erreur</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Test automatique au chargement
+        window.onload = function() {
+            setTimeout(testBackend, 1000);
+        };
+    </script>
+</body>
+</html>
+
