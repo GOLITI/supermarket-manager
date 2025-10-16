@@ -1,0 +1,9 @@
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/SupermarketManagerBackendApplicationTests.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/controller/DashboardControllerIntegrationTest.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/controller/StockControllerIntegrationTest.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/repository/StockRepositoryTest.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/service/AbsenceServiceTest.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/service/CommandeServiceTest.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/service/DashboardServiceTest.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/service/EmployeServiceTest.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/test/java/com/supermarket/manager/service/StockServiceTest.java

@@ -1,0 +1,9 @@
+com/supermarket/manager/controller/StockControllerIntegrationTest.class
+com/supermarket/manager/controller/DashboardControllerIntegrationTest.class
+com/supermarket/manager/SupermarketManagerBackendApplicationTests.class
+com/supermarket/manager/service/EmployeServiceTest.class
+com/supermarket/manager/repository/StockRepositoryTest.class
+com/supermarket/manager/service/CommandeServiceTest.class
+com/supermarket/manager/service/AbsenceServiceTest.class
+com/supermarket/manager/service/DashboardServiceTest.class
+com/supermarket/manager/service/StockServiceTest.class
