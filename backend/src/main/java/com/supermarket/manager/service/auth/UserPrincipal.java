@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 public class UserPrincipal implements UserDetails {
     private Long id;
     private String username;
+    private String firstName;
+    private String lastName;
     private String email;
     @JsonIgnore
     private String password;
@@ -31,11 +33,21 @@ public class UserPrincipal implements UserDetails {
         return new UserPrincipal(
                 user.getId(),
                 user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
                 authorities,
                 user.getActive()
         );
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     @Override

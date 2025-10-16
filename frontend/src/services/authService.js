@@ -1,81 +1,136 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import AuthService from '../services/authService';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
-const AuthContext = createContext();
+const API_URL = 'http://localhost:8080/api/auth';
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+class AuthService {
+    constructor() {
+        this.token = localStorage.getItem('token');
+        this.setupAxiosInterceptors();
     }
-    return context;
-};
 
-export const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        // Vérifier si l'utilisateur est déjà connecté au chargement de l'app
-        const initAuth = async () => {
-            try {
-                const user = AuthService.getCurrentUser();
-
-                if (user && user.token) {
-                    // Optionnel: Valider le token avec le backend
-                    setCurrentUser(user);
+    setupAxiosInterceptors() {
+        axios.interceptors.request.use(
+            (config) => {
+                if (this.token) {
+                    config.headers.Authorization = `Bearer ${this.token}`;
                 }
-            } catch (error) {
-                console.error('Erreur lors de l\'initialisation de l\'auth:', error);
-                AuthService.logout();
-            } finally {
-                setLoading(false);
+                return config;
+            },
+            (error) => {
+                return Promise.reject(error);
             }
-        };
+        );
 
-        initAuth();
-    }, []);
+        axios.interceptors.response.use(
+            (response) => response,
+            async (error) => {
+                if (error.response?.status === 401) {
+                    // Token expiré, tentative de refresh
+                    try {
+                        const refreshToken = localStorage.getItem('refreshToken');
+                        if (refreshToken) {
+                            const response = await this.refreshToken(refreshToken);
+                            const newToken = response.accessToken;
+                            this.setToken(newToken);
+                            error.config.headers.Authorization = `Bearer ${newToken}`;
+                            return axios(error.config);
+                        }
+                    } catch (refreshError) {
+                        this.logout();
+                        window.location.href = '/login';
+                    }
+                }
+                return Promise.reject(error);
+            }
+        );
+    }
 
-    const login = async (username, password) => {
-        try {
-            const userData = await AuthService.login(username, password);
-            setCurrentUser(userData);
-            return userData;
-        } catch (error) {
-            throw error;
+    setToken(token) {
+        this.token = token;
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        } else {
+            delete axios.defaults.headers.common['Authorization'];
         }
-    };
+    }
 
-    const logout = () => {
-        AuthService.logout();
-        setCurrentUser(null);
-    };
+    async login(username, password) {
+        const response = await axios.post(`${API_URL}/login`, {
+            username,
+            password
+        });
 
-    const register = async (userData) => {
-        try {
-            const response = await AuthService.register(userData);
-            return response;
-        } catch (error) {
-            throw error;
+        if (response.data.token) {
+            this.setToken(response.data.token);
         }
-    };
 
-    const hasRole = (role) => {
-        return currentUser?.roles?.includes(role);
-    };
+        return response.data;
+    }
 
-    const value = {
-        currentUser,
-        login,
-        logout,
-        register,
-        hasRole,
-        loading
-    };
+    async register(userData) {
+        const response = await axios.post(`${API_URL}/register`, userData);
+        return response.data;
+    }
 
-    return (
-        <AuthContext.Provider value={value}>
-            {children}
-        </AuthContext.Provider>
-    );
-};
+    async refreshToken(refreshToken) {
+        const response = await axios.post(`${API_URL}/refresh`, { refreshToken });
+
+        if (response.data.accessToken) {
+            this.setToken(response.data.accessToken);
+            localStorage.setItem('token', response.data.accessToken);
+        }
+
+        return response.data;
+    }
+
+    async logout() {
+        try {
+            await axios.post(`${API_URL}/logout`);
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+        } finally {
+            this.setToken(null);
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+        }
+    }
+
+    getUserFromToken() {
+        if (!this.token) return null;
+
+        try {
+            const decoded = jwtDecode(this.token);
+            return {
+                id: decoded.id,
+                username: decoded.sub,
+                email: decoded.email,
+                firstName: decoded.firstName,
+                lastName: decoded.lastName,
+                roles: decoded.roles || []
+            };
+        } catch (error) {
+            console.error('Erreur décodage token:', error);
+            return null;
+        }
+    }
+
+    // Ajouter cette méthode dans authService.js
+    async registerClient(clientData) {
+        const response = await axios.post('http://localhost:8080/api/client/register', clientData);
+        return response.data;
+    }
+
+    isTokenExpired() {
+        if (!this.token) return true;
+
+        try {
+            const decoded = jwtDecode(this.token);
+            return decoded.exp * 1000 < Date.now();
+        } catch (error) {
+            return true;
+        }
+    }
+}
+
+export const authService = new AuthService();

@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------
+Test set: com.supermarket.manager.service.CommandeServiceTest
+-------------------------------------------------------------------------------
+Tests run: 14, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.718 s <<< FAILURE! -- in com.supermarket.manager.service.CommandeServiceTest
+com.supermarket.manager.service.CommandeServiceTest.testGenererCommandesAutomatiques -- Time elapsed: 0.023 s <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting actual not to be null
+	at com.supermarket.manager.service.CommandeServiceTest.testGenererCommandesAutomatiques(CommandeServiceTest.java:260)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

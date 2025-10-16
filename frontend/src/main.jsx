@@ -1,21 +1,14 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './custom-bootstrap.css'
-import AppBootstrap from './AppBootstrap.jsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
 
-console.log('🚀 Frontend avec Bootstrap démarré !');
+// Import CSS
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './custom-bootstrap.css';
+import './styles.css';
 
-const rootElement = document.getElementById('root');
-
-if (rootElement) {
-  createRoot(rootElement).render(
-    <StrictMode>
-      <AppBootstrap />
-    </StrictMode>
-  )
-  console.log('✅ Application Bootstrap rendue avec succès');
-} else {
-  console.error('❌ Élément root non trouvé');
-}
-
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+);

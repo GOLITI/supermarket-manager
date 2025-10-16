@@ -2,6 +2,7 @@
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/config/AsyncConfig.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/config/AuthEntryPointJwt.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/config/AuthTokenFilter.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/config/CorsConfig.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/config/DataInitializer.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/config/JwtUtils.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/config/OpenAPIConfig.java
@@ -10,6 +11,7 @@
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/controller/AuthController.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/controller/CaisseController.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/controller/CarteFideliteController.java
+/home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/controller/ClientAuthController.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/controller/ClientController.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/controller/CommandeController.java
 /home/goliti/PROJETS/AGLPROJET/supermarket-manager/backend/src/main/java/com/supermarket/manager/controller/DashboardController.java

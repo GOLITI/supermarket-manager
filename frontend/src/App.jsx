@@ -1,10 +1,11 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import Login from './components/auth/Login';
 import Layout from './components/Layout/Layout';
+import Login from './components/auth/Login';
 import Dashboard from './pages/Dashboard';
 import Stocks from './pages/Stocks';
 import Caisses from './pages/Caisses';
@@ -13,8 +14,6 @@ import Employes from './pages/Employes';
 import Fournisseurs from './pages/Fournisseurs';
 import Promotions from './pages/Promotions';
 import Rapports from './pages/Rapports';
-import Unauthorized from './pages/Unauthorized';
-import Loading from './components/common/Loading';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -26,95 +25,89 @@ const queryClient = new QueryClient({
     },
 });
 
-const AppContent = () => {
-    const { currentUser, loading } = useAuth();
-
-    if (loading) {
-        return <Loading size="lg" />;
-    }
-
-    return (
-        <Routes>
-            {/* Route racine - Login si non connecté */}
-            <Route
-                path="/"
-                element={!currentUser ? <Login /> : <Navigate to="/dashboard" replace />}
-            />
-
-            {/* Route publique - Login */}
-            <Route
-                path="/login"
-                element={!currentUser ? <Login /> : <Navigate to="/dashboard" replace />}
-            />
-
-            <Route path="/unauthorized" element={<Unauthorized />} />
-
-            {/* Routes protégées */}
-            <Route path="/" element={
-                <ProtectedRoute>
-                    <Layout />
-                </ProtectedRoute>
-            }>
-                <Route index element={<Navigate to="/dashboard" replace />} />
-                <Route path="dashboard" element={<Dashboard />} />
-
-                <Route path="stocks" element={
-                    <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STOCK_MANAGER']}>
-                        <Stocks />
-                    </ProtectedRoute>
-                } />
-
-                <Route path="caisses" element={
-                    <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CASHIER']}>
-                        <Caisses />
-                    </ProtectedRoute>
-                } />
-
-                <Route path="employes" element={
-                    <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_HR_MANAGER']}>
-                        <Employes />
-                    </ProtectedRoute>
-                } />
-
-                <Route path="clients" element={<Clients />} />
-                <Route path="fournisseurs" element={<Fournisseurs />} />
-                <Route path="promotions" element={<Promotions />} />
-                <Route path="rapports" element={<Rapports />} />
-            </Route>
-
-            {/* Redirection par défaut */}
-            <Route path="*" element={<Navigate to={currentUser ? "/dashboard" : "/login"} replace />} />
-        </Routes>
-    );
-};
+// Pages temporaires simples
+const TempPage = ({ title }) => (
+    <div>
+        <div className="page-header">
+            <h1 className="page-title">{title}</h1>
+            <p className="page-subtitle">Page en cours de développement</p>
+        </div>
+        <div className="alert alert-info">
+            <strong>Information :</strong> Cette fonctionnalité sera disponible prochainement.
+        </div>
+    </div>
+);
 
 function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 <Router>
-                    <AppContent />
+                    <Routes>
+
+
+                        <Route path="/login" element={<Login />} />
+                        {/* Routes protégées */}
+                        <Route path="/" element={
+                            <ProtectedRoute>
+                                <Layout />
+                            </ProtectedRoute>
+                        }>
+                            <Route index element={<Navigate to="/dashboard" replace />} />
+                            <Route path="dashboard" element={
+                                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER']}>
+                                    <Dashboard />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="stocks" element={
+                                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_STOCK_MANAGER']}>
+                                    <Stocks />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="caisses" element={
+                                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_CASHIER']}>
+                                    <Caisses />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="clients" element={
+                                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER']}>
+                                    <TempPage title="Gestion des Clients" />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="employes" element={
+                                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_HR_MANAGER']}>
+                                    <TempPage title="Gestion des Employés" />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="fournisseurs" element={
+                                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER']}>
+                                    <TempPage title="Fournisseurs" />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="promotions" element={
+                                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER']}>
+                                    <TempPage title="Promotions" />
+                                </ProtectedRoute>
+                            } />
+                            <Route path="rapports" element={
+                                <ProtectedRoute roles={['ROLE_ADMIN', 'ROLE_MANAGER']}>
+                                    <TempPage title="Rapports & Analytics" />
+                                </ProtectedRoute>
+                            } />
+                        </Route>
+
+                        {/* Route 404 */}
+                        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                    </Routes>
                     <Toaster
                         position="top-right"
                         toastOptions={{
-                            duration: 3000,
+                            duration: 4000,
                             style: {
                                 background: '#363636',
                                 color: '#fff',
-                            },
-                            success: {
-                                duration: 3000,
-                                iconTheme: {
-                                    primary: '#10b981',
-                                    secondary: '#fff',
-                                },
-                            },
-                            error: {
-                                duration: 4000,
-                                iconTheme: {
-                                    primary: '#ef4444',
-                                    secondary: '#fff',
-                                },
+                                borderRadius: '8px',
+                                fontSize: '14px'
                             },
                         }}
                     />

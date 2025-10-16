@@ -1,185 +1,305 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { stockService, produitService } from '../services';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
 import { Package, Plus, AlertCircle, Search, Filter } from 'lucide-react';
-import toast from 'react-hot-toast';
+import './stocks.css';
 
 const Stocks = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showAlertes, setShowAlertes] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [showAlertes, setShowAlertes] = useState(false);
 
-  const { data: stocks, isLoading, refetch } = useQuery({
-    queryKey: ['stocks'],
-    queryFn: () => stockService.getAll().then(res => res.data),
-  });
+    // Données mockées
+    const { data: stocks, isLoading } = useQuery({
+        queryKey: ['stocks'],
+        queryFn: async () => {
+            return {
+                data: [
+                    {
+                        id: 1,
+                        quantite: 15,
+                        seuilAlerte: 20,
+                        produit: {
+                            nom: "Lait entier",
+                            codeEAN: "1234567890123",
+                            categorie: "Laitier",
+                            prixVente: 1200
+                        },
+                        entrepot: { nom: "Principal" }
+                    },
+                    {
+                        id: 2,
+                        quantite: 45,
+                        seuilAlerte: 10,
+                        produit: {
+                            nom: "Pain de mie",
+                            codeEAN: "1234567890124",
+                            categorie: "Boulangerie",
+                            prixVente: 800
+                        },
+                        entrepot: { nom: "Principal" }
+                    },
+                    {
+                        id: 3,
+                        quantite: 5,
+                        seuilAlerte: 15,
+                        produit: {
+                            nom: "Eau minérale 1L",
+                            codeEAN: "1234567890125",
+                            categorie: "Boissons",
+                            prixVente: 500
+                        },
+                        entrepot: { nom: "Principal" }
+                    }
+                ]
+            };
+        }
+    });
 
-  const { data: alertes } = useQuery({
-    queryKey: ['stock-alertes'],
-    queryFn: () => stockService.getAlertes().then(res => res.data),
-  });
+    const { data: alertes } = useQuery({
+        queryKey: ['stock-alertes'],
+        queryFn: async () => {
+            return {
+                data: stocks?.data?.filter(stock => stock.quantite <= stock.seuilAlerte) || []
+            };
+        }
+    });
 
-  const handleAjouterStock = async (stockId, quantite) => {
-    try {
-      await stockService.ajouterQuantite(stockId, quantite);
-      toast.success('Stock mis à jour avec succès');
-      refetch();
-    } catch (error) {
-      toast.error('Erreur lors de la mise à jour du stock');
-    }
-  };
+    const filteredStocks = stocks?.data?.filter(stock =>
+        stock.produit?.nom?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-  const filteredStocks = stocks?.filter(stock =>
-    stock.produit?.nom?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    const displayStocks = showAlertes ? alertes?.data : filteredStocks;
 
-  const displayStocks = showAlertes ? alertes : filteredStocks;
+    const handleAddProduct = () => {
+        alert('Fonctionnalité "Ajouter un produit" à implémenter');
+        // Ici vous pouvez ouvrir un modal ou naviguer vers une autre page
+    };
 
-  if (isLoading) return <Loading size="lg" />;
+    const handleAddStock = (productName) => {
+        const quantite = prompt(`Quantité à ajouter pour ${productName}:`);
+        if (quantite && !isNaN(quantite)) {
+            alert(`Ajouter ${quantite} unités à ${productName}`);
+            // Ici vous pouvez appeler votre API pour mettre à jour le stock
+        }
+    };
 
-  return (
-    <div className="space-y-6">
-      {/* En-tête */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Gestion des stocks</h1>
-          <p className="text-gray-500 mt-1">Gérez vos stocks et inventaires</p>
+    if (isLoading) return (
+        <div className="stocks-loading">
+            <Loading size="lg" />
         </div>
-        <Button icon={Plus}>Ajouter un produit</Button>
-      </div>
+    );
 
-      {/* Statistiques rapides */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-l-4 border-primary-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Total produits</p>
-              <p className="text-2xl font-bold text-gray-800">{stocks?.length || 0}</p>
-            </div>
-            <Package className="w-12 h-12 text-primary-500" />
-          </div>
-        </Card>
-        <Card className="border-l-4 border-red-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Alertes stock</p>
-              <p className="text-2xl font-bold text-red-600">{alertes?.length || 0}</p>
-            </div>
-            <AlertCircle className="w-12 h-12 text-red-500" />
-          </div>
-        </Card>
-        <Card className="border-l-4 border-green-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500">Valeur totale</p>
-              <p className="text-2xl font-bold text-green-600">
-                {(stocks?.reduce((acc, s) => acc + (s.quantite * (s.produit?.prixVente || 0)), 0) || 0).toLocaleString('fr-FR')} FCFA
-              </p>
-            </div>
-            <Package className="w-12 h-12 text-green-500" />
-          </div>
-        </Card>
-      </div>
-
-      {/* Filtres et recherche */}
-      <Card>
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Rechercher un produit..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            />
-          </div>
-          <Button 
-            variant={showAlertes ? 'danger' : 'outline'}
-            icon={AlertCircle}
-            onClick={() => setShowAlertes(!showAlertes)}
-          >
-            {showAlertes ? 'Tous les stocks' : 'Alertes'}
-          </Button>
-          <Button variant="outline" icon={Filter}>Filtrer</Button>
-        </div>
-      </Card>
-
-      {/* Liste des stocks */}
-      <Card title="Liste des stocks">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Produit</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Code</th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700">Quantité</th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700">Seuil alerte</th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700">Entrepôt</th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700">Statut</th>
-                <th className="text-center py-3 px-4 font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayStocks?.map((stock) => (
-                <tr key={stock.id} className="border-b border-gray-100 hover:bg-gray-50">
-                  <td className="py-3 px-4">
-                    <div>
-                      <p className="font-medium text-gray-800">{stock.produit?.nom}</p>
-                      <p className="text-sm text-gray-500">{stock.produit?.categorie}</p>
+    return (
+        <div className="stocks-container">
+            {/* En-tête stylisé */}
+            <div className="stocks-header">
+                <div className="container-fluid">
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                        <div className="mb-3 mb-md-0">
+                            <h1 className="stocks-title">Gestion des stocks</h1>
+                            <p className="stocks-subtitle">Gérez vos stocks et inventaires</p>
+                        </div>
+                        <Button
+                            icon={Plus}
+                            className="add-product-btn"
+                            onClick={handleAddProduct}
+                            type="button"
+                        >
+                            Ajouter un produit
+                        </Button>
                     </div>
-                  </td>
-                  <td className="py-3 px-4 text-gray-600">{stock.produit?.codeEAN || 'N/A'}</td>
-                  <td className="py-3 px-4 text-center">
-                    <span className={`font-semibold ${stock.quantite <= stock.seuilAlerte ? 'text-red-600' : 'text-gray-800'}`}>
-                      {stock.quantite}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-center text-gray-600">{stock.seuilAlerte}</td>
-                  <td className="py-3 px-4 text-center text-gray-600">{stock.entrepot?.nom}</td>
-                  <td className="py-3 px-4 text-center">
-                    {stock.quantite <= stock.seuilAlerte ? (
-                      <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
-                        Stock faible
-                      </span>
-                    ) : (
-                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                        En stock
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="flex items-center justify-center space-x-2">
-                      <Button 
-                        size="sm" 
-                        variant="success"
-                        onClick={() => {
-                          const quantite = prompt('Quantité à ajouter:');
-                          if (quantite) handleAjouterStock(stock.id, parseInt(quantite));
-                        }}
-                      >
-                        + Stock
-                      </Button>
-                      <Button size="sm" variant="outline">Détails</Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {(!displayStocks || displayStocks.length === 0) && (
-            <div className="text-center py-12">
-              <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">Aucun stock trouvé</p>
+                </div>
             </div>
-          )}
+
+            <div className="container-fluid">
+                {/* Statistiques principales */}
+                <div className="stats-grid-stocks">
+                    <div className="stat-card-stock primary stocks-item">
+                        <div className="stat-header-stock">
+                            <div>
+                                <div className="stat-title-stock">Total produits</div>
+                                <div className="stat-value-stock">{stocks?.data?.length || 0}</div>
+                            </div>
+                            <div className="stat-icon-stock primary">
+                                <Package size={24} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="stat-card-stock danger stocks-item">
+                        <div className="stat-header-stock">
+                            <div>
+                                <div className="stat-title-stock">Alertes stock</div>
+                                <div className="stat-value-stock">{alertes?.data?.length || 0}</div>
+                            </div>
+                            <div className="stat-icon-stock danger">
+                                <AlertCircle size={24} />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="stat-card-stock success stocks-item">
+                        <div className="stat-header-stock">
+                            <div>
+                                <div className="stat-title-stock">Valeur totale</div>
+                                <div className="stat-value-stock">
+                                    {(stocks?.data?.reduce((acc, s) => acc + (s.quantite * (s.produit?.prixVente || 0)), 0) || 0).toLocaleString('fr-FR')} FCFA
+                                </div>
+                            </div>
+                            <div className="stat-icon-stock success">
+                                <Package size={24} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Filtres et recherche */}
+                <div className="filters-section-stock stocks-item">
+                    <div className="row g-3 align-items-center">
+                        <div className="col-12 col-md-6">
+                            <div className="input-group">
+                                <span className="input-group-text bg-light">
+                                    <Search size={16} />
+                                </span>
+                                <input
+                                    type="text"
+                                    className="form-control search-input-stock"
+                                    placeholder="Rechercher un produit..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-12 col-md-6">
+                            <div className="filter-buttons">
+                                <Button
+                                    variant={showAlertes ? 'danger' : 'outline'}
+                                    icon={AlertCircle}
+                                    onClick={() => setShowAlertes(!showAlertes)}
+                                    className="filter-btn"
+                                    type="button"
+                                >
+                                    <span className="d-none d-md-inline">
+                                        {showAlertes ? 'Tous les stocks' : 'Voir les alertes'}
+                                    </span>
+                                    <span className="d-md-none">
+                                        {showAlertes ? 'Tous' : 'Alertes'}
+                                    </span>
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    icon={Filter}
+                                    className="filter-btn outline d-none d-md-flex"
+                                    type="button"
+                                >
+                                    Filtrer
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Liste des stocks */}
+                <div className="stocks-table-section stocks-item">
+                    <div className="table-header-stock">
+                        <h2 className="table-title-stock">Liste des stocks</h2>
+                    </div>
+
+                    <div className="table-responsive">
+                        <table className="table table-stock">
+                            <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th className="d-none d-md-table-cell">Code</th>
+                                <th className="text-center">Quantité</th>
+                                <th className="text-center d-none d-md-table-cell">Seuil</th>
+                                <th className="text-center d-none d-lg-table-cell">Entrepôt</th>
+                                <th className="text-center">Statut</th>
+                                <th className="text-center">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {displayStocks?.map((stock) => (
+                                <tr key={stock.id}>
+                                    <td>
+                                        <div>
+                                            <div className="fw-semibold text-dark">{stock.produit?.nom}</div>
+                                            <small className="text-muted">{stock.produit?.categorie}</small>
+                                            <small className="text-muted d-block d-md-none">{stock.produit?.codeEAN}</small>
+                                        </div>
+                                    </td>
+                                    <td className="d-none d-md-table-cell text-muted">{stock.produit?.codeEAN || 'N/A'}</td>
+                                    <td className="text-center">
+                                            <span className={`quantity-indicator ${stock.quantite <= stock.seuilAlerte ? 'low' : 'normal'}`}>
+                                                {stock.quantite}
+                                            </span>
+                                    </td>
+                                    <td className="text-center text-muted d-none d-md-table-cell">{stock.seuilAlerte}</td>
+                                    <td className="text-center text-muted d-none d-lg-table-cell">{stock.entrepot?.nom}</td>
+                                    <td className="text-center">
+                                        {stock.quantite <= stock.seuilAlerte ? (
+                                            <span className="status-badge-stock danger">
+                                                    <AlertCircle size={12} />
+                                                    Faible
+                                                </span>
+                                        ) : (
+                                            <span className="status-badge-stock success">
+                                                    OK
+                                                </span>
+                                        )}
+                                    </td>
+                                    <td className="text-center">
+                                        <div className="action-buttons-stock">
+                                            <Button
+                                                size="sm"
+                                                variant="primary"
+                                                className="btn-action-sm primary"
+                                                onClick={() => handleAddStock(stock.produit?.nom)}
+                                                type="button"
+                                            >
+                                                + Stock
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="btn-action-sm outline d-none d-md-inline-block"
+                                                type="button"
+                                            >
+                                                Détails
+                                            </Button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                        {(!displayStocks || displayStocks.length === 0) && (
+                            <div className="empty-state-stock">
+                                <Package className="empty-state-icon-stock" />
+                                <h3 className="empty-state-title-stock">Aucun stock trouvé</h3>
+                                <p className="empty-state-description-stock">
+                                    {searchTerm
+                                        ? "Essayez de modifier vos critères de recherche"
+                                        : "Commencez par ajouter vos premiers produits"
+                                    }
+                                </p>
+                                <Button
+                                    icon={Plus}
+                                    variant="primary"
+                                    onClick={handleAddProduct}
+                                    type="button"
+                                >
+                                    Ajouter un produit
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
-      </Card>
-    </div>
-  );
+    );
 };
 
 export default Stocks;
-

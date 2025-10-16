@@ -5,36 +5,55 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cced8fe8-ac24-4eb4-9c0e-002abfeaac9a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/AuthEntryPointJwt.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/AuthTokenFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/DataInitializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/JwtUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/WebSecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/model/auth/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/model/auth/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/repository/RoleRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/service/auth/UserDetailsServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/service/auth/UserPrincipal.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/auth/Login.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/auth/ProtectedRoute.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/context/AuthContext.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Unauthorized.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/services/authService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ANALYSE_CONFORMITE_CAHIER_CHARGES.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PLAN_IMPLEMENTATION_MANQUANT.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RAPPORT_IMPLEMENTATION.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/CorsConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/controller/ClientAuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/auth/Home.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/auth/Register.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/dashboard.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/stocks.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/AuthTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/AuthTokenFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/JwtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/JwtUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/config/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/service/auth/UserPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/service/auth/UserPrincipal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App-simple.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/supermarket/manager/config/AuthTokenFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/supermarket/manager/config/AuthTokenFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/supermarket/manager/config/JwtUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/supermarket/manager/config/JwtUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/supermarket/manager/config/WebSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/supermarket/manager/config/WebSecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/supermarket/manager/service/auth/UserPrincipal.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/supermarket/manager/service/auth/UserPrincipal.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/postcss.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/postcss.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/AppBootstrap.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/AppSimple.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/TestApp.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Layout/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layout/Header.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/config/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/config/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Layout/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layout/Layout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Layout/Sidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layout/Sidebar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/auth/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/auth/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/auth/ProtectedRoute.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/auth/ProtectedRoute.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/Button.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/Button.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/Card.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/common/Loading.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/common/Loading.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/context/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/context/AuthContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/custom-bootstrap.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/custom-bootstrap.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main-bootstrap.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main-css.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main-test.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Dashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Dashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Stocks.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Stocks.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/services/authService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/authService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +63,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="CSS File" />
         <option value="JSX File" />
       </list>
     </option>
@@ -59,10 +79,10 @@
     </option>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="33eofHz8GFYCoFpiULbLIV874l5" />
   <component name="ProjectLevelVcsManager">
@@ -78,24 +98,49 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;full.screen.before.presentation.mode&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/goliti/PROJETS/AGLPROJET/supermarket-manager&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/frontend/src/pages" />
       <recent name="$PROJECT_DIR$/backend/src/main/java/com/supermarket/manager/repository" />
       <recent name="$PROJECT_DIR$/frontend/src/components/auth" />
       <recent name="$PROJECT_DIR$/backend/" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="SupermarketManagerBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="supermarket-manager-backend" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.supermarket.manager.SupermarketManagerBackendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -130,6 +175,13 @@
       <workItem from="1760544013886" duration="763000" />
       <workItem from="1760544806017" duration="8170000" />
       <workItem from="1760558372884" duration="11089000" />
+      <workItem from="1760614185611" duration="4785000" />
+      <workItem from="1760619044487" duration="13762000" />
+      <workItem from="1760649172872" duration="2488000" />
+      <workItem from="1760652401023" duration="762000" />
+      <workItem from="1760653236629" duration="1472000" />
+      <workItem from="1760654753842" duration="1870000" />
+      <workItem from="1760656756545" duration="322000" />
     </task>
     <servers />
   </component>
