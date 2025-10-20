@@ -1,0 +1,191 @@
+/* Navigation semaine */
+.planning-week-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    background: linear-gradient(90deg, #f9fafb 0%, #eff6ff 100%);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.planning-week-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: white;
+    color: #374151;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    border: 2px solid #e5e7eb;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.planning-week-nav-btn:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.planning-week-nav-btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.planning-week-info {
+    text-align: center;
+}
+
+.planning-week-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.planning-week-dates {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+/* Corps du modal */
+.planning-modal-body {
+    padding: 2rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+}
+
+.planning-loading {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 0;
+}
+
+/* Grille calendrier */
+.planning-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+}
+
+/* Carte jour */
+.planning-day-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid #e5e7eb;
+    animation: slideIn 0.3s ease-out backwards;
+}
+
+.planning-day-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+/* ===== MODAL PLANNING EMPLOYÉ - CSS PUR ===== */
+
+/* Overlay */
+.planning-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-in-out;
+    padding: 1rem;
+}
+
+/* Conteneur principal */
+.planning-modal-container {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 80rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Header du modal */
+.planning-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.planning-modal-header-decoration {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+}
+
+.planning-modal-header-content {
+    position: relative;
+    z-index: 1;
+}
+
+.planning-modal-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.planning-modal-title svg {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.75rem;
+}
+
+.planning-modal-subtitle {
+    font-size: 1.125rem;
+    color: #dbeafe;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+.planning-modal-close-btn {
+    position: relative;
+    z-index: 1;
+    color: white;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.planning-modal-close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.planning-modal-close-btn svg {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+
